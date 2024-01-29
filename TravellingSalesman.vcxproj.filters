@@ -26,5 +26,8 @@
     <ClInclude Include="Finding.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PSO.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,8 @@
 #include <execution>
 #include <bitset>
 
+constexpr size_t BFS_RESULTS = 1;
+
 typedef std::vector<std::vector<float>> Graph;
 
 void BFS(const Graph& graph) {
@@ -60,7 +62,7 @@ void BFS(const Graph& graph) {
         }
     );
 
-    for (size_t i = 0; i < std::min(current.size(), current.size()); ++i) {
+    for (size_t i = 0; i < std::min(current.size(), BFS_RESULTS); ++i) {
         std::cout << "known result: " << current[i].first << " " << current[i].second << std::endl;
     }
 }
@@ -225,15 +227,115 @@ void DFS3(const Graph& graph) {
 
     const auto& res = *std::min_element(min_values.begin() + 1, min_values.end());
 
+    for (size_t pos = 0; pos < graph_size; ++pos) {
+        std::cout << get_nth(res.answer, pos) << " ";
+    }
+
     std::cout << "res: " << res.answer << " " << res.value << std::endl << std::endl;
 }
 
-//A*, Ant colonial optimisation, Nearest neighbour, Other greedy
-
 void NearestNeighbour(const Graph& graph) {
     const size_t graph_size = graph.size();
+
+    std::vector<bool> visited(graph_size, false);
+    std::vector<size_t> cities_order;
+
+    cities_order.push_back(0);
+
+    float totalCost = 0;
+    size_t currentCity = 0;
+
+    for (size_t i = 0; i < graph_size - 1; ++i) {
+        visited[currentCity] = true;
+        float minDistance = std::numeric_limits<float>::infinity();
+        size_t nextCity = -1;
+
+        for (size_t j = 1; j < graph_size; ++j) {
+            if (!visited[j] && graph[currentCity][j] != std::numeric_limits<float>::infinity() && graph[currentCity][j] < minDistance) {
+                minDistance = graph[currentCity][j];
+                nextCity = j;
+            }
+        }
+
+        if (nextCity == -1) {
+            std::cout << "no valid path\n\n";
+            return; // No valid path
+        }
+
+        cities_order.push_back(nextCity);
+        totalCost += minDistance;
+        currentCity = nextCity;
+    }
+
+    if (graph[currentCity][0] != std::numeric_limits<float>::infinity()) {
+        totalCost += graph[currentCity][0];
+    }
+    else {
+        std::cout << "no valid path\n\n";
+        return; // No valid path
+    }
+
+    for (const auto path : cities_order) {
+        std::cout << path << " ";
+    }
+    std::cout << "distance is: " << totalCost << "\n\n";
 }
 
-void AStar(const Graph& graph) {
+void Dijkstra(const Graph& graph) { // no idea what is going on here
+    const size_t size = graph.size();
+
+    std::vector<float> dist(size, std::numeric_limits<float>::infinity());
+    std::vector<int> prev(size, size);
+    std::vector<bool> visited(size, false);
+
+    dist[0] = 0;
+
+    using PQT = std::pair<float, int>;
+
+    std::vector<PQT> pq;
+
+    for (size_t i = 0; i < size; ++i) {
+        pq.push_back({ dist[i], i });
+    }
+
+    std::sort(std::begin(pq), std::end(pq));
+    std::reverse(std::begin(pq), std::end(pq));
+
+    for (size_t i = 0; i < size; ++i) {
+        std::cout << pq[i].first << ' ' << pq[i].second << '\n';
+    }
+
+    while (!pq.empty()) {
+        const auto u = pq.back().second;
+        pq.pop_back();
+        if (visited[u]) continue;
+        std::cout << u << " - ";
+        visited[u] = true;
+
+        for (size_t v = 0; v < size; ++v) {
+            auto alt = dist[u] + graph[u][v];
+
+            if (alt < dist[v] && !visited[v]) {
+                dist[v] = alt;
+                prev[v] = u;
+                pq.push_back({ alt, v });
+                std::sort(std::begin(pq), std::end(pq));
+                std::reverse(std::begin(pq), std::end(pq));
+            }
+        }
+        for (size_t i = 0; i < size; ++i) {
+            std::cout << dist[i] << ' ';
+        }
+        std::cout << '\n';
+    }
+}
+
+
+void AStar(const Graph& graph) { // another algorithm going from A to B and not A to B to A :)
     const size_t graph_size = graph.size();
 }
+
+void AntColonialOptimisation(const Graph& graph) {
+    const size_t graph_size = graph.size();
+}
+
