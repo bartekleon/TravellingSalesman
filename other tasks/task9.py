@@ -47,27 +47,3 @@ history = discriminator.fit(train_dataset, epochs=5)
 
 discriminator.save_weights('discriminator_weights.h5')
 
-
-def create_classification_model(trained_discriminator, freeze_layers=True):
-  if freeze_layers:
-    for layer in trained_discriminator.layers:
-      layer.trainable = False
-
-  # Add fully-connected layers for classification
-  x = Dense(128, activation='relu')(trained_discriminator.output)
-  output = Dense(10, activation='softmax')(x)
-
-  return Model(inputs=trained_discriminator.input, outputs=output)
-
-# Create three different models for the three scenarios
-# 1. Randomly initialized model
-model_random = create_classification_model(create_discriminator_model(), freeze_layers=False)
-
-# 2. Model with weights for conv layers loaded from trained discriminator
-discriminator.load_weights('discriminator_weights.h5')
-model_pretrained = create_classification_model(discriminator, freeze_layers=False)
-
-# 3. Model with weights for conv layers loaded from trained discriminator and frozen
-model_pretrained_frozen = create_classification_model(discriminator, freeze_layers=True)
-
-model_random.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])

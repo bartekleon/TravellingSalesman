@@ -188,7 +188,7 @@ class ACO:
 
 
 if __name__ == "__main__":
-    cityNames = ['A', 'B', 'C', 'D', 'E']
+    cityNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
     cities = []
     for letter in cityNames:
         cities.append(City(letter, random.randint(-100, 100), random.randint(-100, 100), random.randint(0, 50)))

@@ -1,6 +1,6 @@
-from keras.layers import Dense, Input, Flatten, Activation, Dropout, Reshape, LeakyReLU
-from keras.models import Sequential, Model
-from keras.datasets import mnist
+from tensorflow.keras.layers import Dense, Input, Flatten, Activation, Dropout, Reshape, LeakyReLU
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.datasets import mnist
 from matplotlib import pyplot as plt
 import numpy as np
 

@@ -63,15 +63,15 @@ print(X_train.shape, X_test.shape, len(y_train), len(y_test))
 
 EPOCHS = 10
 
-# model_simple = Sequential([
-#   Conv1D(filters=1, kernel_size=5, activation='relu', input_shape=(15, 4)),
-#   Flatten(),
-#   Dense(1, activation='sigmoid')
-# ])
+model_simple = Sequential([
+  Conv1D(filters=1, kernel_size=5, activation='relu', input_shape=(15, 4)),
+  Flatten(),
+  Dense(1, activation='sigmoid')
+])
 
-# model_simple.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
-# history_simple = model_simple.fit(X_train, np.array(y_train), epochs=EPOCHS, validation_data=(X_test, np.array(y_test)))
-# print(model_simple.layers[0].get_weights()[0])
+model_simple.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
+history_simple = model_simple.fit(X_train, np.array(y_train), epochs=EPOCHS, validation_data=(X_test, np.array(y_test)))
+print(model_simple.layers[0].get_weights()[0])
 
 
 # model_simple2 = Sequential([
